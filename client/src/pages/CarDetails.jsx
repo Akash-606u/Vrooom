@@ -14,23 +14,101 @@ const CarDetails = () => {
 
   const navigate = useNavigate()
   const [car, setCar] = useState(null)
+  const [paymentOption, setPaymentOption] = useState('pay_at_pickup')
+  const [paymentGateway, setPaymentGateway] = useState('stripe')
+  const [drivingLicenseFile, setDrivingLicenseFile] = useState(null)
+  const [identityProofFile, setIdentityProofFile] = useState(null)
   const currency = import.meta.env.VITE_CURRENCY
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true)
+      const script = document.createElement('script')
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+      script.onload = () => resolve(true)
+      script.onerror = () => resolve(false)
+      document.body.appendChild(script)
+    })
+  }
 
   const handleSubmit = async (e)=>{
     e.preventDefault();
+    if(!drivingLicenseFile || !identityProofFile){
+      toast.error('Please upload both driving license and identity proof before booking.')
+      return
+    }
+
     try {
-      const {data} = await axios.post('/api/bookings/create', {
-        car: id,
-        pickupDate, 
-        returnDate
+      const formData = new FormData()
+      formData.append('car', id)
+      formData.append('pickupDate', pickupDate)
+      formData.append('returnDate', returnDate)
+      formData.append('paymentOption', paymentOption)
+      formData.append('paymentGateway', paymentOption === 'pay_at_pickup' ? 'cash' : paymentGateway)
+      formData.append('drivingLicense', drivingLicenseFile)
+      formData.append('identityProof', identityProofFile)
+
+      const {data} = await axios.post('/api/bookings/create', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
 
-      if (data.success){
-        toast.success(data.message)
-        navigate('/my-bookings')
-      }else{
+      if (!data.success) {
         toast.error(data.message)
+        return
       }
+
+      if (data.paymentGateway === 'stripe' && data.sessionUrl) {
+        window.location.href = data.sessionUrl
+        return
+      }
+
+      if (data.paymentGateway === 'razorpay' && data.order) {
+        const loaded = await loadRazorpayScript()
+        if (!loaded) {
+          toast.error('Unable to load Razorpay checkout. Please try again.')
+          return
+        }
+
+        const options = {
+          key: data.key,
+          amount: data.order.amount,
+          currency: data.order.currency,
+          name: `${car.brand} ${car.model}`,
+          description: 'Car booking payment',
+          order_id: data.order.id,
+          handler: async (response) => {
+            try {
+              const token = localStorage.getItem('token')
+              const confirm = await axios.post('/api/bookings/confirm-payment', {
+                bookingId: data.bookingId,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature
+              }, {
+                headers: { Authorization: token }
+              })
+              if (confirm.data.success) {
+                toast.success(confirm.data.message)
+                navigate('/my-bookings')
+              } else {
+                toast.error(confirm.data.message)
+              }
+            } catch (confirmError) {
+              toast.error(confirmError.message)
+            }
+          },
+          modal: {
+            ondismiss: () => toast.error('Payment cancelled or not completed.')
+          }
+        }
+
+        const paymentObject = new window.Razorpay(options)
+        paymentObject.open()
+        return
+      }
+
+      toast.success(data.message)
+      navigate('/my-bookings')
     } catch (error) {
       toast.error(error.message)
     }
@@ -138,6 +216,45 @@ const CarDetails = () => {
               <label htmlFor="return-date">Return Date</label>
               <input value={returnDate} onChange={(e)=>setReturnDate(e.target.value)}
               type="date" className='border border-borderColor px-3 py-2 rounded-lg' required id='return-date'/>
+            </div>
+
+            <div className='space-y-3'>
+              <p className='font-medium'>Payment Options</p>
+              <label className='flex items-center gap-3'>
+                <input type='radio' name='paymentOption' value='pay_at_pickup' checked={paymentOption === 'pay_at_pickup'} onChange={() => setPaymentOption('pay_at_pickup')} />
+                Pay at pickup
+              </label>
+              <label className='flex items-center gap-3'>
+                <input type='radio' name='paymentOption' value='pay_now' checked={paymentOption === 'pay_now'} onChange={() => setPaymentOption('pay_now')} />
+                Pay now online
+              </label>
+              {paymentOption === 'pay_now' && (
+                <div className='pl-6 space-y-2'>
+                  <label className='flex items-center gap-3'>
+                    <input type='radio' name='paymentGateway' value='stripe' checked={paymentGateway === 'stripe'} onChange={() => setPaymentGateway('stripe')} />
+                    Stripe
+                  </label>
+                  <label className='flex items-center gap-3'>
+                    <input type='radio' name='paymentGateway' value='razorpay' checked={paymentGateway === 'razorpay'} onChange={() => setPaymentGateway('razorpay')} />
+                    Razorpay
+                  </label>
+                </div>
+              )}
+            </div>
+
+            <div className='space-y-4 p-4 border border-borderColor rounded-xl bg-gray-50'>
+              <p className='font-semibold text-gray-800'>Document Verification</p>
+              <p className='text-sm text-gray-500'>Upload a valid driving license and identity proof (Aadhaar / PAN). Without these documents, the car cannot be released at pickup.</p>
+              <div className='grid gap-4'>
+                <label className='flex flex-col gap-2 text-sm'>
+                  Driving License
+                  <input type='file' accept='image/*,.pdf' onChange={(e)=>setDrivingLicenseFile(e.target.files[0] || null)} className='border border-borderColor rounded-lg px-3 py-2' />
+                </label>
+                <label className='flex flex-col gap-2 text-sm'>
+                  Identity Proof
+                  <input type='file' accept='image/*,.pdf' onChange={(e)=>setIdentityProofFile(e.target.files[0] || null)} className='border border-borderColor rounded-lg px-3 py-2' />
+                </label>
+              </div>
             </div>
 
             <button className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl cursor-pointer'>Book Now</button>

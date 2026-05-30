@@ -8,6 +8,7 @@ const ManageBookings = () => {
   const { currency, axios } = useAppContext()
 
   const [bookings, setBookings] = useState([])
+  const [ownerDocs, setOwnerDocs] = useState({})
 
   const fetchOwnerBookings = async ()=>{
     try {
@@ -28,6 +29,44 @@ const ManageBookings = () => {
         toast.error(data.message)
       }
       
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  const handleOwnerDocumentChange = (bookingId, type, file) => {
+    setOwnerDocs(prev => ({
+      ...prev,
+      [bookingId]: {
+        ...prev[bookingId],
+        [type]: file
+      }
+    }))
+  }
+
+  const uploadOwnerDocuments = async (bookingId) => {
+    try {
+      const docs = ownerDocs[bookingId] || {}
+      if(!docs.drivingLicense || !docs.identityProof){
+        toast.error('Please upload both driving license and identity proof before submitting.')
+        return
+      }
+
+      const formData = new FormData()
+      formData.append('bookingId', bookingId)
+      formData.append('drivingLicense', docs.drivingLicense)
+      formData.append('identityProof', docs.identityProof)
+
+      const { data } = await axios.post('/api/bookings/owner-upload-docs', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
+      if(data.success){
+        toast.success(data.message)
+        fetchOwnerBookings()
+      } else {
+        toast.error(data.message)
+      }
     } catch (error) {
       toast.error(error.message)
     }
@@ -70,7 +109,11 @@ const ManageBookings = () => {
                 <td className='p-3'>{currency}{booking.price}</td>
 
                 <td className='p-3 max-md:hidden'>
-                  <span className='bg-gray-100 px-3 py-1 rounded-full text-xs'>offline</span>
+                  <span className='bg-gray-100 px-3 py-1 rounded-full text-xs'>
+                    {booking.paymentOption === 'pay_at_pickup'
+                      ? 'Pay at pickup'
+                      : `${booking.paymentGateway?.charAt(0).toUpperCase() + booking.paymentGateway?.slice(1)} • ${booking.paymentStatus}`}
+                  </span>
                 </td>
 
                 <td className='p-3'>
@@ -83,6 +126,45 @@ const ManageBookings = () => {
                   ): (
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${booking.status === 'confirmed' ? 'bg-green-100 text-green-500' : 'bg-red-100 text-red-500'}`}>{booking.status}</span>
                   )}
+
+                  <div className='mt-3 text-xs space-y-3'>
+                    <div className='space-y-1'>
+                      <p className='font-semibold text-gray-700'>User Documents</p>
+                      {booking.userDocuments?.drivingLicense && booking.userDocuments?.identityProof ? (
+                        <div className='text-gray-600'>
+                          <p><a href={booking.userDocuments.drivingLicense} target='_blank' rel='noreferrer' className='underline text-primary'>View user driving license</a></p>
+                          <p><a href={booking.userDocuments.identityProof} target='_blank' rel='noreferrer' className='underline text-primary'>View user identity proof</a></p>
+                        </div>
+                      ) : (
+                        <p className='text-orange-600'>User has not uploaded required documents yet.</p>
+                      )}
+                    </div>
+
+                    <div className='space-y-1'>
+                      <p className='font-semibold text-gray-700'>Pickup Documents</p>
+                      {booking.ownerDocuments?.drivingLicense && booking.ownerDocuments?.identityProof ? (
+                        <div className='text-gray-600'>
+                          <p><a href={booking.ownerDocuments.drivingLicense} target='_blank' rel='noreferrer' className='underline text-primary'>View uploaded driving license</a></p>
+                          <p><a href={booking.ownerDocuments.identityProof} target='_blank' rel='noreferrer' className='underline text-primary'>View uploaded identity proof</a></p>
+                          <p className='text-green-600'>Owner can update these documents below.</p>
+                        </div>
+                      ) : (
+                        <p className='text-orange-600'>Pickup document upload required before handover.</p>
+                      )}
+                    </div>
+
+                    <div className='space-y-2'>
+                      <label className='block text-xs text-gray-600'>
+                        Driving License
+                        <input type='file' accept='image/*,.pdf' onChange={(e)=>handleOwnerDocumentChange(booking._id, 'drivingLicense', e.target.files[0] || null)} className='mt-1 w-full border border-borderColor rounded-md px-2 py-1 bg-white'/>
+                      </label>
+                      <label className='block text-xs text-gray-600'>
+                        Identity Proof
+                        <input type='file' accept='image/*,.pdf' onChange={(e)=>handleOwnerDocumentChange(booking._id, 'identityProof', e.target.files[0] || null)} className='mt-1 w-full border border-borderColor rounded-md px-2 py-1 bg-white'/>
+                      </label>
+                      <button type='button' onClick={()=>uploadOwnerDocuments(booking._id)} className='px-3 py-1 rounded-md bg-primary text-white text-xs'>Upload / Update Pickup Docs</button>
+                    </div>
+                  </div>
                 </td>
 
               </tr>

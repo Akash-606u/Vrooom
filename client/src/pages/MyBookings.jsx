@@ -81,6 +81,27 @@ const MyBookings = () => {
                   <p>{booking.car.location}</p>
                 </div>
               </div>
+
+              <div className='flex items-start gap-2 mt-3'>
+                <img src={assets.calendar_icon_colored} alt="" className='w-4 h-4 mt-1'/>
+                <div>
+                  <p className='text-gray-500'>Payment</p>
+                  <p>
+                    {booking.paymentOption === 'pay_at_pickup'
+                      ? 'Pay at pickup'
+                      : `${booking.paymentGateway?.charAt(0).toUpperCase() + booking.paymentGateway?.slice(1)} • ${booking.paymentStatus}`}
+                  </p>
+                </div>
+              </div>
+
+              <div className='flex items-start gap-2 mt-3'>
+                <img src={assets.location_icon_colored} alt="" className='w-4 h-4 mt-1'/>
+                <div>
+                  <p className='text-gray-500'>Verification</p>
+                  <p>{booking.userDocuments?.drivingLicense && booking.userDocuments?.identityProof ? 'User documents uploaded' : 'User documents missing'}</p>
+                  <p>{booking.ownerDocuments?.drivingLicense && booking.ownerDocuments?.identityProof ? 'Pickup docs verified' : 'Owner pickup verification pending'}</p>
+                </div>
+              </div>
             </div>
 
            {/* Price */}

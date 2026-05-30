@@ -14,7 +14,11 @@ const carSchema = new mongoose.Schema({
     pricePerDay: { type: Number, required: true },
     location: { type: String, required: true },
     description: { type: String, required: true },
-    isAvaliable: {type: Boolean, default: true}
+    isAvaliable: {type: Boolean, default: true},
+    approvalStatus: {type: String, enum: ["pending", "approved", "rejected"], default: "pending"},
+    rejectionReason: {type: String, default: ''},
+    approvedBy: {type: ObjectId, ref: 'User', default: null},
+    approvalDate: {type: Date, default: null}
 },{timestamps: true})
 
 const Car = mongoose.model('Car', carSchema)

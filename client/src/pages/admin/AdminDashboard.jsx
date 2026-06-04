@@ -36,165 +36,109 @@ const AdminDashboard = () => {
     if (error) return <AdminLayout><div className="error">Error: {error}</div></AdminLayout>;
     if (!dashboardData) return <AdminLayout><div className="loading">No data</div></AdminLayout>;
 
+    const revenueAmount = dashboardData.revenue?.total ?? 0;
+    const recentBookings = dashboardData.recentActivities?.recentBookings ?? [];
+
     return (
         <AdminLayout>
             <div className="dashboard-container">
-                <h1 className="page-title">Dashboard Overview</h1>
-
-                {/* User Statistics */}
-                <section className="stats-section">
-                    <h2>User Statistics</h2>
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <div className="stat-icon">👥</div>
-                            <div className="stat-content">
-                                <h3>Total Users</h3>
-                                <p className="stat-value">{dashboardData.users.total}</p>
-                            </div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-icon">👔</div>
-                            <div className="stat-content">
-                                <h3>Total Owners</h3>
-                                <p className="stat-value">{dashboardData.users.owners}</p>
-                            </div>
-                        </div>
-                        <div className="stat-card">
-                            <div className="stat-icon">👤</div>
-                            <div className="stat-content">
-                                <h3>Regular Users</h3>
-                                <p className="stat-value">{dashboardData.users.regularUsers}</p>
-                            </div>
-                        </div>
+                <div className="dashboard-hero">
+                    <div>
+                        <p className="hero-label">Admin Dashboard</p>
+                        <h2>Monitor performance at a glance</h2>
+                        <p className="hero-description">Quickly review all active cars, bookings status, revenue and latest customer activity in one clean view.</p>
                     </div>
-                </section>
+                </div>
 
-                {/* Car Statistics */}
-                <section className="stats-section">
-                    <h2>Car Statistics</h2>
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <div className="stat-icon">🚗</div>
-                            <div className="stat-content">
-                                <h3>Total Cars</h3>
-                                <p className="stat-value">{dashboardData.cars.total}</p>
-                            </div>
+                <div className="summary-grid">
+                    <div className="summary-card blue">
+                        <div>
+                            <p>Total Cars</p>
+                            <strong>{dashboardData.cars.total}</strong>
                         </div>
-                        <div className="stat-card approved">
-                            <div className="stat-icon">✅</div>
-                            <div className="stat-content">
-                                <h3>Approved Cars</h3>
-                                <p className="stat-value">{dashboardData.cars.approved}</p>
-                            </div>
-                        </div>
-                        <div className="stat-card pending">
-                            <div className="stat-icon">⏳</div>
-                            <div className="stat-content">
-                                <h3>Pending Approval</h3>
-                                <p className="stat-value">{dashboardData.cars.pending}</p>
-                            </div>
-                        </div>
-                        <div className="stat-card rejected">
-                            <div className="stat-icon">❌</div>
-                            <div className="stat-content">
-                                <h3>Rejected Cars</h3>
-                                <p className="stat-value">{dashboardData.cars.rejected}</p>
-                            </div>
-                        </div>
+                        <div className="card-icon">🚗</div>
                     </div>
-                </section>
-
-                {/* Booking Statistics */}
-                <section className="stats-section">
-                    <h2>Booking Statistics</h2>
-                    <div className="stats-grid">
-                        <div className="stat-card">
-                            <div className="stat-icon">📅</div>
-                            <div className="stat-content">
-                                <h3>Total Bookings</h3>
-                                <p className="stat-value">{dashboardData.bookings.total}</p>
-                            </div>
+                    <div className="summary-card violet">
+                        <div>
+                            <p>Total Bookings</p>
+                            <strong>{dashboardData.bookings.total}</strong>
                         </div>
-                        <div className="stat-card pending">
-                            <div className="stat-icon">⏳</div>
-                            <div className="stat-content">
-                                <h3>Pending</h3>
-                                <p className="stat-value">{dashboardData.bookings.pending}</p>
-                            </div>
-                        </div>
-                        <div className="stat-card approved">
-                            <div className="stat-icon">✅</div>
-                            <div className="stat-content">
-                                <h3>Confirmed</h3>
-                                <p className="stat-value">{dashboardData.bookings.confirmed}</p>
-                            </div>
-                        </div>
-                        <div className="stat-card rejected">
-                            <div className="stat-icon">❌</div>
-                            <div className="stat-content">
-                                <h3>Cancelled</h3>
-                                <p className="stat-value">{dashboardData.bookings.cancelled}</p>
-                            </div>
-                        </div>
+                        <div className="card-icon">📅</div>
                     </div>
-                </section>
-
-                {/* Revenue */}
-                <section className="stats-section">
-                    <h2>Revenue</h2>
-                    <div className="stats-grid">
-                        <div className="stat-card large">
-                            <div className="stat-icon">💰</div>
-                            <div className="stat-content">
-                                <h3>Total Revenue</h3>
-                                <p className="stat-value">₹{dashboardData.revenue.total.toLocaleString()}</p>
-                            </div>
+                    <div className="summary-card yellow">
+                        <div>
+                            <p>Pending</p>
+                            <strong>{dashboardData.bookings.pending}</strong>
                         </div>
+                        <div className="card-icon">⏳</div>
                     </div>
-                </section>
+                    <div className="summary-card green">
+                        <div>
+                            <p>Confirmed</p>
+                            <strong>{dashboardData.bookings.confirmed}</strong>
+                        </div>
+                        <div className="card-icon">✅</div>
+                    </div>
+                </div>
 
-                {/* Recent Activities */}
-                <section className="recent-activities">
-                    <h2>Recent Activities</h2>
-                    
-                    <div className="activity-section">
-                        <h3>Recent Cars Added</h3>
-                        <div className="activity-list">
-                            {dashboardData.recentActivities.recentCars.length > 0 ? (
-                                dashboardData.recentActivities.recentCars.map(car => (
-                                    <div key={car._id} className="activity-item">
-                                        <div className="activity-info">
-                                            <p className="activity-title">{car.brand} {car.model}</p>
-                                            <p className="activity-detail">Owner: {car.owner?.name}</p>
-                                            <p className="activity-detail">Status: <span className={`status ${car.approvalStatus}`}>{car.approvalStatus}</span></p>
+                <div className="dashboard-grid">
+                    <section className="panel panel-bookings">
+                        <div className="panel-header">
+                            <div>
+                                <h3>Recent Bookings</h3>
+                                <p>Latest customer reservations</p>
+                            </div>
+                            <span className="panel-badge">{recentBookings.length} latest</span>
+                        </div>
+
+                        <div className="booking-list">
+                            {recentBookings.length > 0 ? (
+                                recentBookings.map((booking) => (
+                                    <div key={booking._id} className="booking-row">
+                                        <div>
+                                            <p className="booking-title">{booking.car?.brand ?? 'Car'} {booking.car?.model ?? ''}</p>
+                                            <p className="booking-meta">{booking.user?.name ?? 'Guest'}</p>
+                                        </div>
+                                        <div className="booking-right">
+                                            <p className="booking-price">₹{booking.totalAmount ?? booking.price ?? '0'}</p>
+                                            <span className={`status-pill ${booking.status}`}>{booking.status ?? 'unknown'}</span>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <p>No recent cars</p>
+                                <p className="empty-state">No recent bookings available.</p>
                             )}
                         </div>
-                    </div>
+                    </section>
 
-                    <div className="activity-section">
-                        <h3>Recent Bookings</h3>
-                        <div className="activity-list">
-                            {dashboardData.recentActivities.recentBookings.length > 0 ? (
-                                dashboardData.recentActivities.recentBookings.map(booking => (
-                                    <div key={booking._id} className="activity-item">
-                                        <div className="activity-info">
-                                            <p className="activity-title">{booking.car?.brand} {booking.car?.model}</p>
-                                            <p className="activity-detail">User: {booking.user?.name}</p>
-                                            <p className="activity-detail">Status: <span className={`status ${booking.status}`}>{booking.status}</span></p>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No recent bookings</p>
-                            )}
+                    <section className="panel panel-revenue">
+                        <div className="panel-header">
+                            <div>
+                                <h3>Monthly Revenue</h3>
+                                <p>Revenue from all confirmed bookings</p>
+                            </div>
                         </div>
-                    </div>
-                </section>
+
+                        <div className="revenue-card">
+                            <div>
+                                <p>Current month</p>
+                                <strong>₹{Number(revenueAmount).toLocaleString()}</strong>
+                            </div>
+                            <div className="revenue-icon">💰</div>
+                        </div>
+
+                        <div className="revenue-summary">
+                            <div>
+                                <span>Total Bookings</span>
+                                <strong>{dashboardData.bookings.total}</strong>
+                            </div>
+                            <div>
+                                <span>Confirmed</span>
+                                <strong>{dashboardData.bookings.confirmed}</strong>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </AdminLayout>
     );

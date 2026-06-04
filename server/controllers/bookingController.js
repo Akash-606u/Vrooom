@@ -92,6 +92,7 @@ export const createBooking = async (req, res)=>{
         }
 
         const carData = await Car.findById(car)
+        console.log(carData);
 
         const picked = new Date(pickupDate);
         const returned = new Date(returnDate);

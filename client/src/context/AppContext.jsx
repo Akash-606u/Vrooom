@@ -15,6 +15,7 @@ export const AppProvider = ({ children })=>{
     const [token, setToken] = useState(null)
     const [user, setUser] = useState(null)
     const [isOwner, setIsOwner] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false);
     const [showLogin, setShowLogin] = useState(false)
     const [pickupDate, setPickupDate] = useState('')
     const [returnDate, setReturnDate] = useState('')
@@ -27,6 +28,7 @@ export const AppProvider = ({ children })=>{
            const {data} = await axios.get('/api/user/data')
            if (data.success) {
             setUser(data.user)
+            setIsAdmin(data.user.role === 'admin')
             setIsOwner(data.user.role === 'owner')
            }else{
             navigate('/')
@@ -74,7 +76,7 @@ export const AppProvider = ({ children })=>{
 
     const value = {
         navigate, currency, axios, user, setUser,
-        token, setToken, isOwner, setIsOwner, fetchUser, showLogin, setShowLogin, logout, fetchCars, cars, setCars, 
+        token, setToken, isOwner, setIsOwner,isAdmin,setIsAdmin, fetchUser, showLogin, setShowLogin, logout, fetchCars, cars, setCars, 
         pickupDate, setPickupDate, returnDate, setReturnDate
     }
 

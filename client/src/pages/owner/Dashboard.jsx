@@ -17,6 +17,8 @@ const Dashboard = () => {
     monthlyRevenue: 0,
   })
 
+  console.log(data)
+
   const dashboardCards = [
     {title: "Total Cars", value: data.totalCars, icon: assets.carIconColored},
     {title: "Total Bookings", value: data.totalBookings, icon: assets.listIconColored},
@@ -67,7 +69,7 @@ const Dashboard = () => {
         <div className='p-4 md:p-6 border border-borderColor rounded-md max-w-lg w-full'>
           <h1 className='text-lg font-medium'>Recent Bookings</h1>
           <p className='text-gray-500'>Latest customer bookings</p>
-          {data.recentBookings.map((booking, index)=>(
+          {data.recentBookings.length > 0 && data.recentBookings.map((booking, index)=>(
             <div key={index} className='mt-4 flex items-center justify-between'>
 
               <div className='flex items-center gap-2'>
@@ -75,7 +77,7 @@ const Dashboard = () => {
                   <img src={assets.listIconColored} alt="" className='h-5 w-5'/>
                 </div>
                 <div>
-                  <p>{booking.car.brand} {booking.car.model}</p>
+                  <p> {booking.car.model}</p>
                   <p className='text-sm text-gray-500'>{booking.createdAt.split('T')[0]}</p>
                 </div>
               </div>

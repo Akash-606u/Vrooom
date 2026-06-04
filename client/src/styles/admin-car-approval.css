@@ -1,257 +1,294 @@
 /* Admin Car Approval Styles */
 .car-approval-container {
-    max-width: 1400px;
-    margin: 0 auto;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-hero {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 32px 36px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  margin-bottom: 28px;
+}
+
+.hero-label {
+  margin: 0 0 10px;
+  color: #6366f1;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin: 0 0 10px;
+  font-size: 32px;
+  color: #111827;
+}
+
+.hero-description {
+  margin: 0;
+  color: #4b5563;
+  max-width: 700px;
+  line-height: 1.8;
 }
 
 .approval-content {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 30px;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 30px;
+  align-items: start;
 }
 
 .cars-list {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    padding: 20px;
-    height: fit-content;
-    max-height: 600px;
-    overflow-y: auto;
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 24px;
+  height: fit-content;
+  max-height: 700px;
+  overflow-y: auto;
 }
 
 .cars-list h2 {
-    margin: 0 0 15px 0;
-    font-size: 18px;
-    color: #333;
-    font-weight: 600;
+  margin: 0 0 20px 0;
+  font-size: 22px;
+  color: #111827;
+  font-weight: 700;
 }
 
 .car-card {
-    background: #f5f7fa;
-    padding: 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  background: #f8fafc;
+  padding: 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  display: flex;
+  gap: 16px;
+  align-items: center;
 }
 
 .car-card:hover {
-    background: #eef2f7;
-    transform: translateX(5px);
+  background: #eef2ff;
+  transform: translateX(2px);
 }
 
 .car-card.selected {
-    border-color: #667eea;
-    background: #e8ecff;
+  border-color: #6366f1;
+  background: #e0e7ff;
 }
 
 .car-thumbnail {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 5px;
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
 }
 
 .car-info h3 {
-    margin: 0 0 5px 0;
-    font-size: 14px;
-    color: #333;
-    font-weight: 600;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #111827;
+  font-weight: 700;
 }
 
 .car-info p {
-    margin: 3px 0;
-    font-size: 12px;
-    color: #666;
+  margin: 4px 0;
+  font-size: 13px;
+  color: #475569;
 }
 
 .car-details {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    padding: 30px;
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 28px;
 }
 
 .car-details h2 {
-    margin: 0 0 20px 0;
-    font-size: 20px;
-    color: #333;
-    font-weight: 600;
+  margin: 0 0 24px 0;
+  font-size: 26px;
+  color: #111827;
+  font-weight: 700;
 }
 
 .details-content {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-    gap: 30px;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 30px;
 }
 
 .detail-image {
-    width: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-    max-height: 300px;
+  width: 100%;
+  border-radius: 22px;
+  object-fit: cover;
+  max-height: 360px;
+  border: 1px solid #e2e8f0;
 }
 
 .details-info {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .info-row {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 12px;
 }
 
 .info-row label {
-    display: block;
-    font-weight: 600;
-    color: #667eea;
-    font-size: 12px;
-    text-transform: uppercase;
-    margin-bottom: 5px;
+  display: block;
+  font-weight: 700;
+  color: #4338ca;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
 }
 
 .info-row p {
-    margin: 0;
-    color: #333;
-    font-size: 15px;
+  margin: 0;
+  color: #334155;
+  font-size: 15px;
 }
 
 .approval-actions {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .action-buttons {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 22px;
 }
 
 .btn-approve,
 .btn-reject {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  flex: 1;
+  padding: 16px 18px;
+  border: none;
+  border-radius: 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .btn-approve {
-    background-color: #28a745;
-    color: white;
+  background-color: #22c55e;
+  color: white;
 }
 
 .btn-approve:hover {
-    background-color: #218838;
-    transform: scale(1.02);
+  transform: translateY(-2px);
 }
 
 .btn-reject {
-    background-color: #dc3545;
-    color: white;
+  background-color: #ef4444;
+  color: white;
 }
 
 .btn-reject:hover {
-    background-color: #c82333;
-    transform: scale(1.02);
+  transform: translateY(-2px);
 }
 
 .rejection-form {
-    background: #fff3cd;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid #ffc107;
+  background: #f8fafc;
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
 }
 
 .rejection-form h3 {
-    margin: 0 0 10px 0;
-    color: #856404;
-    font-size: 14px;
+  margin: 0 0 14px 0;
+  color: #4338ca;
+  font-size: 16px;
 }
 
 .rejection-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-family: inherit;
-    font-size: 14px;
-    resize: none;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 120px;
 }
 
 .form-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .btn-submit,
 .btn-cancel {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
+  flex: 1;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .btn-submit {
-    background-color: #dc3545;
-    color: white;
+  background-color: #ef4444;
+  color: white;
 }
 
 .btn-submit:hover {
-    background-color: #c82333;
+  transform: translateY(-2px);
 }
 
 .btn-cancel {
-    background-color: #6c757d;
-    color: white;
+  background-color: #94a3b8;
+  color: white;
 }
 
 .btn-cancel:hover {
-    background-color: #5a6268;
+  transform: translateY(-2px);
 }
 
-@media (max-width: 1000px) {
-    .approval-content {
-        grid-template-columns: 1fr;
-    }
-
-    .cars-list {
-        max-height: 300px;
-    }
-
-    .details-content {
-        grid-template-columns: 1fr;
-    }
+.no-data {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 32px;
+  text-align: center;
+  color: #475569;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
 }
 
-.scrollbar-thin::-webkit-scrollbar {
-    width: 8px;
+@media (max-width: 1100px) {
+  .approval-content {
+    grid-template-columns: 1fr;
+  }
+
+  .cars-list {
+    max-height: 420px;
+  }
+
+  .details-content {
+    grid-template-columns: 1fr;
+  }
 }
 
-.scrollbar-thin::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
+@media (max-width: 720px) {
+  .page-hero,
+  .cars-list,
+  .car-details {
+    padding: 22px;
+  }
 
-.scrollbar-thin::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: #555;
+  .details-content {
+    gap: 20px;
+  }
 }

@@ -9,6 +9,7 @@ const AdminCarApproval = () => {
     const [error, setError] = useState(null);
     const [selectedCar, setSelectedCar] = useState(null);
     const [rejectionReason, setRejectionReason] = useState('');
+    const [showRejectionForm, setShowRejectionForm] = useState(false);
 
     useEffect(() => {
         fetchPendingCars();
@@ -44,6 +45,7 @@ const AdminCarApproval = () => {
                 setPendingCars(pendingCars.filter(car => car._id !== carId));
                 alert('Car approved successfully!');
                 setSelectedCar(null);
+                setShowRejectionForm(false);
             }
         } catch (err) {
             console.log(err);
@@ -69,6 +71,7 @@ const AdminCarApproval = () => {
                 alert('Car rejected!');
                 setSelectedCar(null);
                 setRejectionReason('');
+                setShowRejectionForm(false);
             }
         } catch (err) {
             console.log(err);
@@ -82,7 +85,13 @@ const AdminCarApproval = () => {
     return (
         <AdminLayout>
             <div className="car-approval-container">
-                <h1 className="page-title">Car Approval Management</h1>
+                <div className="page-hero">
+                    <div>
+                        <p className="hero-label">Approval Workflow</p>
+                        <h1 className="page-title">Car Approval Management</h1>
+                        <p className="hero-description">Review pending cars quickly, approve the best listings, and add rejection reasons when needed.</p>
+                    </div>
+                </div>
 
                 {pendingCars.length === 0 ? (
                     <div className="no-data">
@@ -93,10 +102,13 @@ const AdminCarApproval = () => {
                         <div className="cars-list">
                             <h2>Pending Cars ({pendingCars.length})</h2>
                             {pendingCars.map(car => (
-                                <div 
+                                <div
                                     key={car._id}
                                     className={`car-card ${selectedCar?._id === car._id ? 'selected' : ''}`}
-                                    onClick={() => setSelectedCar(car)}
+                                    onClick={() => {
+                                        setSelectedCar(car);
+                                        setShowRejectionForm(false);
+                                    }}
                                 >
                                     <img src={car.image} alt={car.brand} className="car-thumbnail" />
                                     <div className="car-info">
@@ -114,7 +126,7 @@ const AdminCarApproval = () => {
                                 <h2>Car Details</h2>
                                 <div className="details-content">
                                     <img src={selectedCar.image} alt={selectedCar.brand} className="detail-image" />
-                                    
+
                                     <div className="details-info">
                                         <div className="info-row">
                                             <label>Brand</label>
@@ -164,46 +176,48 @@ const AdminCarApproval = () => {
 
                                     <div className="approval-actions">
                                         <div className="action-buttons">
-                                            <button 
+                                            <button
                                                 className="btn-approve"
                                                 onClick={() => handleApproveCar(selectedCar._id)}
                                             >
                                                 ✅ Approve Car
                                             </button>
-                                            <button 
+                                            <button
                                                 className="btn-reject"
-                                                onClick={() => document.querySelector('.rejection-form').style.display = 'block'}
+                                                onClick={() => setShowRejectionForm(true)}
                                             >
                                                 ❌ Reject Car
                                             </button>
                                         </div>
 
-                                        <div className="rejection-form" style={{display: 'none'}}>
-                                            <h3>Rejection Reason</h3>
-                                            <textarea 
-                                                value={rejectionReason}
-                                                onChange={(e) => setRejectionReason(e.target.value)}
-                                                placeholder="Enter reason for rejection..."
-                                                rows="4"
-                                            ></textarea>
-                                            <div className="form-buttons">
-                                                <button 
-                                                    className="btn-submit"
-                                                    onClick={() => handleRejectCar(selectedCar._id)}
-                                                >
-                                                    Submit Rejection
-                                                </button>
-                                                <button 
-                                                    className="btn-cancel"
-                                                    onClick={() => {
-                                                        document.querySelector('.rejection-form').style.display = 'none';
-                                                        setRejectionReason('');
-                                                    }}
-                                                >
-                                                    Cancel
-                                                </button>
+                                        {showRejectionForm && (
+                                            <div className="rejection-form">
+                                                <h3>Rejection Reason</h3>
+                                                <textarea
+                                                    value={rejectionReason}
+                                                    onChange={(e) => setRejectionReason(e.target.value)}
+                                                    placeholder="Enter reason for rejection..."
+                                                    rows="4"
+                                                ></textarea>
+                                                <div className="form-buttons">
+                                                    <button
+                                                        className="btn-submit"
+                                                        onClick={() => handleRejectCar(selectedCar._id)}
+                                                    >
+                                                        Submit Rejection
+                                                    </button>
+                                                    <button
+                                                        className="btn-cancel"
+                                                        onClick={() => {
+                                                            setShowRejectionForm(false);
+                                                            setRejectionReason('');
+                                                        }}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

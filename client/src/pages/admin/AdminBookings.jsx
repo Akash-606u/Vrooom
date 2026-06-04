@@ -42,8 +42,8 @@ const AdminBookings = () => {
                 { headers: { Authorization: token } }
             );
             if (response.data.success) {
-                const updatedBookings = bookings.map(booking => 
-                    booking._id === bookingId 
+                const updatedBookings = bookings.map(booking =>
+                    booking._id === bookingId
                         ? { ...booking, status: newStatus }
                         : booking
                 );
@@ -60,16 +60,46 @@ const AdminBookings = () => {
         return new Date(date).toLocaleDateString();
     };
 
+    const totalRevenue = bookings.reduce((sum, booking) => sum + (booking.status === 'confirmed' ? booking.price : 0), 0);
+    const confirmedCount = bookings.filter(booking => booking.status === 'confirmed').length;
+    const pendingCount = bookings.filter(booking => booking.status === 'pending').length;
+    const cancelledCount = bookings.filter(booking => booking.status === 'cancelled').length;
+
     if (loading) return <AdminLayout><div className="loading">Loading...</div></AdminLayout>;
     if (error) return <AdminLayout><div className="error">Error: {error}</div></AdminLayout>;
 
     return (
         <AdminLayout>
             <div className="bookings-container">
-                <h1 className="page-title">All Bookings Management</h1>
+                <div className="page-hero">
+                    <div>
+                        <p className="hero-label">Booking Management</p>
+                        <h1 className="page-title">All Bookings Management</h1>
+                        <p className="hero-description">Track every reservation, update booking statuses, and watch revenue across confirmed trips.</p>
+                    </div>
+                </div>
+
+                <div className="status-grid bookings-status-grid">
+                    <div className="status-card blue">
+                        <p>Total Bookings</p>
+                        <strong>{bookings.length}</strong>
+                    </div>
+                    <div className="status-card green">
+                        <p>Confirmed</p>
+                        <strong>{confirmedCount}</strong>
+                    </div>
+                    <div className="status-card yellow">
+                        <p>Pending</p>
+                        <strong>{pendingCount}</strong>
+                    </div>
+                    <div className="status-card red">
+                        <p>Cancelled</p>
+                        <strong>{cancelledCount}</strong>
+                    </div>
+                </div>
 
                 <div className="filters-section">
-                    <label>Filter by Status:</label>
+                    <label>Filter by Status</label>
                     <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
                         <option value="all">All</option>
                         <option value="pending">Pending</option>
@@ -90,8 +120,8 @@ const AdminBookings = () => {
                                     <th>Car</th>
                                     <th>User</th>
                                     <th>Owner</th>
-                                    <th>Pickup Date</th>
-                                    <th>Return Date</th>
+                                    <th>Pickup</th>
+                                    <th>Return</th>
                                     <th>Price</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -102,15 +132,15 @@ const AdminBookings = () => {
                                     <tr key={booking._id}>
                                         <td>
                                             <strong>{booking.car?.brand} {booking.car?.model}</strong>
-                                            <small>{booking.car?.category}</small>
+                                            <p className="table-subtext">{booking.car?.category}</p>
                                         </td>
                                         <td>
                                             <strong>{booking.user?.name}</strong>
-                                            <small>{booking.user?.email}</small>
+                                            <p className="table-subtext">{booking.user?.email}</p>
                                         </td>
                                         <td>
                                             <strong>{booking.owner?.name}</strong>
-                                            <small>{booking.owner?.email}</small>
+                                            <p className="table-subtext">{booking.owner?.email}</p>
                                         </td>
                                         <td>{formatDate(booking.pickupDate)}</td>
                                         <td>{formatDate(booking.returnDate)}</td>
@@ -121,7 +151,7 @@ const AdminBookings = () => {
                                             </span>
                                         </td>
                                         <td>
-                                            <select 
+                                            <select
                                                 value={booking.status}
                                                 onChange={(e) => handleStatusChange(booking._id, e.target.value)}
                                                 className="status-select"
@@ -139,9 +169,17 @@ const AdminBookings = () => {
                 )}
 
                 <div className="summary-section">
-                    <h3>Summary</h3>
-                    <p>Total Bookings: {bookings.length}</p>
-                    <p>Total Revenue: ₹{bookings.reduce((sum, b) => sum + (b.status === 'confirmed' ? b.price : 0), 0)}</p>
+                    <h3>Booking Summary</h3>
+                    <div className="summary-values">
+                        <div>
+                            <span>Total Revenue</span>
+                            <strong>₹{totalRevenue}</strong>
+                        </div>
+                        <div>
+                            <span>Confirmed Bookings</span>
+                            <strong>{confirmedCount}</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
         </AdminLayout>

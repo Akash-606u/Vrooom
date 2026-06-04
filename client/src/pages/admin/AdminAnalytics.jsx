@@ -35,12 +35,39 @@ const AdminAnalytics = () => {
     if (error) return <AdminLayout><div className="error">Error: {error}</div></AdminLayout>;
     if (!analyticsData) return <AdminLayout><div className="loading">No data</div></AdminLayout>;
 
+    const totalBookings = analyticsData.bookingStatusDistribution.reduce((sum, item) => sum + item.count, 0);
+    const totalRevenue = analyticsData.revenueByCategory.reduce((sum, item) => sum + item.totalRevenue, 0);
+
     return (
         <AdminLayout>
             <div className="analytics-container">
-                <h1 className="page-title">Analytics & Reports</h1>
+                <div className="page-hero">
+                    <div>
+                        <p className="hero-label">Analytics</p>
+                        <h1 className="page-title">Analytics & Reports</h1>
+                        <p className="hero-description">Explore top trends, revenue breakdowns, and category performance across the car rental marketplace.</p>
+                    </div>
+                </div>
 
-                {/* Bookings by Month */}
+                <div className="status-grid analytics-summary-grid">
+                    <div className="status-card blue">
+                        <p>Total Revenue</p>
+                        <strong>₹{totalRevenue.toLocaleString()}</strong>
+                    </div>
+                    <div className="status-card violet">
+                        <p>Total Bookings</p>
+                        <strong>{totalBookings}</strong>
+                    </div>
+                    <div className="status-card green">
+                        <p>Confirmed</p>
+                        <strong>{analyticsData.bookingStatusDistribution.find(i => i._id === 'confirmed')?.count || 0}</strong>
+                    </div>
+                    <div className="status-card yellow">
+                        <p>Pending</p>
+                        <strong>{analyticsData.bookingStatusDistribution.find(i => i._id === 'pending')?.count || 0}</strong>
+                    </div>
+                </div>
+
                 <section className="analytics-section">
                     <h2>📅 Bookings by Month</h2>
                     <div className="chart-container">
@@ -59,8 +86,8 @@ const AdminAnalytics = () => {
                                             <td>{item.month}</td>
                                             <td>
                                                 <div className="bar-chart">
-                                                    <div 
-                                                        className="bar" 
+                                                    <div
+                                                        className="bar"
                                                         style={{
                                                             width: `${(item.bookings / Math.max(...analyticsData.bookingsByMonth.map(x => x.bookings)) * 100) || 0}%`
                                                         }}
@@ -80,7 +107,6 @@ const AdminAnalytics = () => {
                     </div>
                 </section>
 
-                {/* Revenue by Category */}
                 <section className="analytics-section">
                     <h2>💰 Revenue by Car Category</h2>
                     <div className="chart-container">
@@ -111,7 +137,6 @@ const AdminAnalytics = () => {
                     </div>
                 </section>
 
-                {/* Car Category Distribution */}
                 <section className="analytics-section">
                     <h2>🚗 Car Category Distribution</h2>
                     <div className="chart-container">
@@ -133,8 +158,8 @@ const AdminAnalytics = () => {
                                                     <td>{item._id}</td>
                                                     <td>
                                                         <div className="bar-chart">
-                                                            <div 
-                                                                className="bar" 
+                                                            <div
+                                                                className="bar"
                                                                 style={{
                                                                     width: `${(item.count / total * 100)}%`,
                                                                     backgroundColor: `hsl(${idx * 60}, 70%, 50%)`
@@ -157,7 +182,6 @@ const AdminAnalytics = () => {
                     </div>
                 </section>
 
-                {/* Booking Status Distribution */}
                 <section className="analytics-section">
                     <h2>📊 Booking Status Distribution</h2>
                     <div className="chart-container">
@@ -174,21 +198,21 @@ const AdminAnalytics = () => {
                                     (() => {
                                         const total = analyticsData.bookingStatusDistribution.reduce((sum, item) => sum + item.count, 0);
                                         const statusColors = {
-                                            pending: '#ffa500',
-                                            confirmed: '#28a745',
-                                            cancelled: '#dc3545'
+                                            pending: '#f59e0b',
+                                            confirmed: '#22c55e',
+                                            cancelled: '#ef4444'
                                         };
                                         return analyticsData.bookingStatusDistribution.map((item, idx) => (
                                             <tr key={idx}>
                                                 <td>
-                                                    <span className="status-indicator" style={{backgroundColor: statusColors[item._id]}}></span>
+                                                    <span className="status-indicator" style={{ backgroundColor: statusColors[item._id] }}></span>
                                                     {item._id}
                                                 </td>
                                                 <td>{item.count}</td>
                                                 <td>
                                                     <div className="percentage-bar">
-                                                        <div 
-                                                            className="percentage-fill" 
+                                                        <div
+                                                            className="percentage-fill"
                                                             style={{
                                                                 width: `${(item.count / total * 100)}%`,
                                                                 backgroundColor: statusColors[item._id]

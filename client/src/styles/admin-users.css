@@ -1,329 +1,390 @@
 /* Admin Users Styles */
 .users-container {
-    max-width: 1400px;
-    margin: 0 auto;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-hero {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 32px 36px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  margin-bottom: 28px;
+}
+
+.hero-label {
+  margin: 0 0 10px;
+  color: #6366f1;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.page-title {
+  margin: 0 0 10px;
+  font-size: 32px;
+  color: #111827;
+}
+
+.hero-description {
+  margin: 0;
+  color: #4b5563;
+  max-width: 700px;
+  line-height: 1.8;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.status-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 22px 24px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.status-card p {
+  margin: 0 0 8px;
+  color: #6b7280;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.status-card strong {
+  font-size: 32px;
+  color: #111827;
+}
+
+.status-card.blue {
+  border: 1px solid rgba(59, 130, 246, 0.16);
+}
+
+.status-card.violet {
+  border: 1px solid rgba(139, 92, 246, 0.16);
+}
+
+.status-card.green {
+  border: 1px solid rgba(16, 185, 129, 0.16);
+}
+
+.status-card.yellow {
+  border: 1px solid rgba(245, 158, 11, 0.16);
 }
 
 .filters-section {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    flex-wrap: wrap;
+  background: white;
+  padding: 22px 24px;
+  border-radius: 22px;
+  margin-bottom: 30px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  flex-wrap: wrap;
 }
 
 .filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .filter-group label {
-    font-weight: 600;
-    color: #333;
+  font-weight: 600;
+  color: #374151;
 }
 
 .filter-group select,
 .search-group input {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  font-size: 14px;
+  background: #f8fafc;
 }
 
 .search-group {
-    flex: 1;
-    min-width: 250px;
+  flex: 1;
+  min-width: 250px;
 }
 
 .search-group input {
-    width: 100%;
+  width: 100%;
 }
 
 .users-content {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 30px;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 30px;
+  align-items: start;
 }
 
 .users-list {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    padding: 20px;
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 24px;
 }
 
 .users-list h2 {
-    margin: 0 0 15px 0;
-    color: #333;
-    font-size: 18px;
-    font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #111827;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .users-table-container {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .users-table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .users-table thead {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+  background: #eef2ff;
 }
 
 .users-table th {
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  padding: 16px 18px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .users-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
 }
 
 .users-table tbody tr:hover {
-    background-color: #f5f7fa;
+  background-color: #f8fafc;
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
 }
 
-.role-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
+.role-badge,
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .role-badge.user {
-    background-color: #d4edda;
-    color: #155724;
+  background-color: #d1fae5;
+  color: #065f46;
 }
 
 .role-badge.owner {
-    background-color: #e2e3e5;
-    color: #383d41;
+  background-color: #e2e8f0;
+  color: #334155;
 }
 
 .role-badge.admin {
-    background-color: #cce5ff;
-    color: #004085;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
+  background-color: #dbeafe;
+  color: #1d4ed8;
 }
 
 .status-badge.active {
-    background-color: #d4edda;
-    color: #155724;
+  background-color: #d1fae5;
+  color: #065f46;
 }
 
 .status-badge.inactive {
-    background-color: #f8d7da;
-    color: #721c24;
+  background-color: #fee2e2;
+  color: #b91c1c;
 }
 
 .btn-view-details,
 .btn-toggle-status {
-    padding: 6px 12px;
-    margin: 2px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+  padding: 8px 14px;
+  margin: 2px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .btn-view-details {
-    background-color: #667eea;
-    color: white;
+  background-color: #4338ca;
+  color: white;
 }
 
 .btn-view-details:hover {
-    background-color: #5568d3;
+  transform: translateY(-1px);
 }
 
 .btn-toggle-status.deactivate {
-    background-color: #ffc107;
-    color: #333;
+  background-color: #fbbf24;
+  color: #111827;
 }
 
 .btn-toggle-status.deactivate:hover {
-    background-color: #e0a800;
+  transform: translateY(-1px);
 }
 
 .btn-toggle-status.activate {
-    background-color: #28a745;
-    color: white;
+  background-color: #22c55e;
+  color: white;
 }
 
 .btn-toggle-status.activate:hover {
-    background-color: #218838;
+  transform: translateY(-1px);
 }
 
 .user-details {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    padding: 20px;
-    position: relative;
-    height: fit-content;
+  background: white;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 24px;
+  position: relative;
+  height: fit-content;
 }
 
 .user-details h2 {
-    margin: 0 0 15px 0;
-    font-size: 18px;
-    color: #333;
-    font-weight: 600;
+  margin: 0 0 20px 0;
+  font-size: 22px;
+  color: #111827;
+  font-weight: 700;
 }
 
 .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #999;
-    transition: color 0.3s ease;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: color 0.2s ease;
 }
 
 .close-btn:hover {
-    color: #333;
+  color: #334155;
 }
 
 .details-content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .detail-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 0 auto;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+  border: 2px solid #eef2ff;
 }
 
 .user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .info-row {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 12px;
 }
 
 .info-row label {
-    font-weight: 600;
-    color: #667eea;
-    font-size: 11px;
-    text-transform: uppercase;
+  font-weight: 700;
+  color: #4338ca;
+  font-size: 11px;
+  text-transform: uppercase;
 }
 
 .info-row p {
-    margin: 5px 0 0 0;
-    color: #333;
-    font-size: 14px;
+  margin: 8px 0 0;
+  color: #334155;
+  font-size: 15px;
 }
 
 .cars-section,
 .bookings-section {
-    border-top: 1px solid #eee;
-    padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 18px;
 }
 
 .cars-section h3,
 .bookings-section h3 {
-    margin: 0 0 10px 0;
-    font-size: 13px;
-    color: #667eea;
-    font-weight: 600;
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #4338ca;
+  font-weight: 700;
 }
 
 .cars-list,
 .bookings-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .car-item,
 .booking-item {
-    background: #f5f7fa;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 12px;
+  background: #f8fafc;
+  padding: 14px 16px;
+  border-radius: 16px;
+  font-size: 14px;
 }
 
 .car-item p,
 .booking-item p {
-    margin: 3px 0;
-    color: #333;
+  margin: 4px 0;
+  color: #334155;
 }
 
 .car-status,
 .booking-status {
-    font-size: 10px;
-    font-weight: 600;
-    color: #667eea;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4338ca;
 }
 
-@media (max-width: 1000px) {
-    .users-content {
-        grid-template-columns: 1fr;
-    }
-
-    .user-details {
-        order: -1;
-    }
+@media (max-width: 1100px) {
+  .users-content {
+    grid-template-columns: 1fr;
+  }
 }
 
-@media (max-width: 768px) {
-    .filters-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
+@media (max-width: 820px) {
+  .filters-section,
+  .users-list,
+  .user-details {
+    padding: 20px;
+  }
 
-    .search-group {
-        width: 100%;
-    }
-
-    .users-table {
-        font-size: 12px;
-    }
-
-    .users-table th,
-    .users-table td {
-        padding: 10px;
-    }
+  .users-table th,
+  .users-table td {
+    padding: 14px;
+  }
 }

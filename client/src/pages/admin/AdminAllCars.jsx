@@ -9,6 +9,7 @@ const AdminAllCars = () => {
     const [error, setError] = useState(null);
     const [filterStatus, setFilterStatus] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCar, setSelectedCar] = useState(null);
 
     useEffect(() => {
         fetchAllCars();
@@ -40,7 +41,7 @@ const AdminAllCars = () => {
                 const token = localStorage.getItem('token');
                 const response = await axios.delete(
                     'http://localhost:3000/api/admin/cars/delete',
-                    { 
+                    {
                         data: { carId },
                         headers: { Authorization: token }
                     }
@@ -56,7 +57,18 @@ const AdminAllCars = () => {
         }
     };
 
-    const filteredCars = cars.filter(car => 
+    const handleViewCar = (car) => {
+        setSelectedCar(car);
+    };
+
+    const handleClosePreview = () => {
+        setSelectedCar(null);
+    };
+
+    const approvedCount = cars.filter(car => car.approvalStatus === 'approved').length;
+    const pendingCount = cars.filter(car => car.approvalStatus === 'pending').length;
+    const rejectedCount = cars.filter(car => car.approvalStatus === 'rejected').length;
+    const filteredCars = cars.filter(car =>
         car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
         car.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
         car.owner?.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -68,11 +80,36 @@ const AdminAllCars = () => {
     return (
         <AdminLayout>
             <div className="all-cars-container">
-                <h1 className="page-title">All Cars Management</h1>
+                <div className="page-hero">
+                    <div>
+                        <p className="hero-label">Car Management</p>
+                        <h1 className="page-title">All Cars Management</h1>
+                        <p className="hero-description">Browse the full inventory, manage pending approvals, and review owner details from one polished dashboard.</p>
+                    </div>
+                </div>
+
+                <div className="status-grid">
+                    <div className="status-card approved">
+                        <p>Total Cars</p>
+                        <strong>{cars.length}</strong>
+                    </div>
+                    <div className="status-card blue">
+                        <p>Approved</p>
+                        <strong>{approvedCount}</strong>
+                    </div>
+                    <div className="status-card yellow">
+                        <p>Pending</p>
+                        <strong>{pendingCount}</strong>
+                    </div>
+                    <div className="status-card red">
+                        <p>Rejected</p>
+                        <strong>{rejectedCount}</strong>
+                    </div>
+                </div>
 
                 <div className="filters-section">
                     <div className="filter-group">
-                        <label>Filter by Status:</label>
+                        <label>Filter by Status</label>
                         <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
                             <option value="all">All</option>
                             <option value="pending">Pending</option>
@@ -82,7 +119,7 @@ const AdminAllCars = () => {
                     </div>
 
                     <div className="search-group">
-                        <input 
+                        <input
                             type="text"
                             placeholder="Search by brand, model, or owner..."
                             value={searchTerm}
@@ -118,6 +155,7 @@ const AdminAllCars = () => {
                                         </td>
                                         <td>
                                             <strong>{car.brand} {car.model}</strong>
+                                            <p className="table-subtext">{car.description || car.category}</p>
                                         </td>
                                         <td>{car.year}</td>
                                         <td>{car.category}</td>
@@ -139,13 +177,14 @@ const AdminAllCars = () => {
                                             )}
                                         </td>
                                         <td>
-                                            <button 
+                                            <button
                                                 className="btn-view"
                                                 title="View Details"
+                                                onClick={() => handleViewCar(car)}
                                             >
                                                 👁️ View
                                             </button>
-                                            <button 
+                                            <button
                                                 className="btn-delete"
                                                 onClick={() => handleDeleteCar(car._id)}
                                                 title="Delete Car"
@@ -157,6 +196,56 @@ const AdminAllCars = () => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                )}
+
+                {selectedCar && (
+                    <div className="car-preview-overlay" onClick={handleClosePreview}>
+                        <div className="car-preview-card" onClick={(e) => e.stopPropagation()}>
+                            <button className="card-close-btn" onClick={handleClosePreview}>
+                                ✕
+                            </button>
+                            <div className="preview-grid">
+                                <img
+                                    src={selectedCar.image || 'https://via.placeholder.com/720x480'}
+                                    alt={`${selectedCar.brand} ${selectedCar.model}`}
+                                    className="preview-image"
+                                />
+                                <div className="preview-details">
+                                    <p className="hero-label">Car Details</p>
+                                    <h2>{selectedCar.brand} {selectedCar.model}</h2>
+                                    <p className="preview-description">
+                                        {selectedCar.description || 'No description available for this car.'}
+                                    </p>
+                                    <div className="preview-row">
+                                        <span className="preview-label">Year</span>
+                                        <span className="preview-value">{selectedCar.year || 'N/A'}</span>
+                                    </div>
+                                    <div className="preview-row">
+                                        <span className="preview-label">Category</span>
+                                        <span className="preview-value">{selectedCar.category || 'N/A'}</span>
+                                    </div>
+                                    <div className="preview-row">
+                                        <span className="preview-label">Price / Day</span>
+                                        <span className="preview-value">₹{selectedCar.pricePerDay || 'N/A'}</span>
+                                    </div>
+                                    <div className="preview-row">
+                                        <span className="preview-label">Owner</span>
+                                        <span className="preview-value">{selectedCar.owner?.name || 'Unknown'}{selectedCar.owner?.email ? ` — ${selectedCar.owner.email}` : ''}</span>
+                                    </div>
+                                    <div className="preview-row">
+                                        <span className="preview-label">Status</span>
+                                        <span className="preview-value">{selectedCar.approvalStatus || 'N/A'}</span>
+                                    </div>
+                                    {selectedCar.rejectionReason && (
+                                        <div className="preview-row">
+                                            <span className="preview-label">Rejection Reason</span>
+                                            <span className="preview-value">{selectedCar.rejectionReason}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

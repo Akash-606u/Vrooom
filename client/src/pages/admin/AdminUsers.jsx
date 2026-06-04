@@ -80,17 +80,46 @@ const AdminUsers = () => {
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const totalOwners = users.filter(user => user.role === 'owner').length;
+    const totalRegular = users.filter(user => user.role === 'user').length;
+    const activeUsers = users.filter(user => user.isActive).length;
+
     if (loading) return <AdminLayout><div className="loading">Loading...</div></AdminLayout>;
     if (error) return <AdminLayout><div className="error">Error: {error}</div></AdminLayout>;
 
     return (
         <AdminLayout>
             <div className="users-container">
-                <h1 className="page-title">User & Owner Management</h1>
+                <div className="page-hero">
+                    <div>
+                        <p className="hero-label">User Management</p>
+                        <h1 className="page-title">User & Owner Management</h1>
+                        <p className="hero-description">Search, filter, and manage users and owners with a clean, dashboard-driven interface.</p>
+                    </div>
+                </div>
+
+                <div className="status-grid users-status-grid">
+                    <div className="status-card blue">
+                        <p>Total Users</p>
+                        <strong>{users.length}</strong>
+                    </div>
+                    <div className="status-card violet">
+                        <p>Owners</p>
+                        <strong>{totalOwners}</strong>
+                    </div>
+                    <div className="status-card green">
+                        <p>Regular Users</p>
+                        <strong>{totalRegular}</strong>
+                    </div>
+                    <div className="status-card yellow">
+                        <p>Active</p>
+                        <strong>{activeUsers}</strong>
+                    </div>
+                </div>
 
                 <div className="filters-section">
                     <div className="filter-group">
-                        <label>Filter by Role:</label>
+                        <label>Filter by Role</label>
                         <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
                             <option value="all">All Users</option>
                             <option value="user">Regular Users</option>
@@ -99,7 +128,7 @@ const AdminUsers = () => {
                     </div>
 
                     <div className="search-group">
-                        <input 
+                        <input
                             type="text"
                             placeholder="Search by name or email..."
                             value={searchTerm}
@@ -149,13 +178,13 @@ const AdminUsers = () => {
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <button 
+                                                    <button
                                                         className="btn-view-details"
                                                         onClick={() => handleGetUserDetails(user._id)}
                                                     >
                                                         👁️ View
                                                     </button>
-                                                    <button 
+                                                    <button
                                                         className={`btn-toggle-status ${user.isActive ? 'deactivate' : 'activate'}`}
                                                         onClick={() => handleToggleStatus(user._id)}
                                                     >
@@ -174,10 +203,10 @@ const AdminUsers = () => {
                         <div className="user-details">
                             <h2>User Details</h2>
                             <button className="close-btn" onClick={() => setSelectedUser(null)}>✕</button>
-                            
+
                             <div className="details-content">
                                 <img src={selectedUser.user.image || 'https://via.placeholder.com/100'} alt={selectedUser.user.name} className="detail-avatar" />
-                                
+
                                 <div className="user-info">
                                     <div className="info-row">
                                         <label>Name:</label>

@@ -1,25 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { assets, menuLinks } from '../assets/assets'
-import {Link, useLocation, useNavigate} from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
-import {motion} from 'motion/react'
+import { motion } from 'motion/react'
 
 const Navbar = () => {
 
-    const {setShowLogin, user, logout, isOwner, axios, setIsOwner, isAdmin} = useAppContext()
+    const { setShowLogin, user, logout, isOwner, axios, setIsOwner, isAdmin } = useAppContext()
 
     const location = useLocation()
     const [open, setOpen] = useState(false)
+    const [navbarSearch, setNavbarSearch] = useState('')
     const navigate = useNavigate()
 
-    const changeRole = async ()=>{
+    const changeRole = async () => {
         try {
             const { data } = await axios.post('/api/owner/change-role')
             if (data.success) {
                 setIsOwner(true)
                 toast.success(data.message)
-            }else{
+            } else {
                 toast.error(data.message)
             }
         } catch (error) {
@@ -27,43 +28,75 @@ const Navbar = () => {
         }
     }
 
-  return (
-    <motion.div 
-    initial={{y: -20, opacity: 0}}
-    animate={{y: 0, opacity: 1}}
-    transition={{duration: 0.5}}
-    className={`flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 text-gray-600 border-b border-borderColor relative transition-all ${location.pathname === "/" && "bg-light"}`}>
+    const handleSearch = () => {
+        const query = navbarSearch.trim()
+        if (query) {
+            navigate(`/cars?search=${encodeURIComponent(query)}`)
+        } else {
+            navigate('/cars')
+        }
+    }
 
-        <Link to='/'>
-            <motion.img whileHover={{scale: 1.05}} src={assets.logo} alt="logo" className="h-8"/>
-        </Link>
+    const handleSearchKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
+            handleSearch()
+        }
+    }
 
-        <div className={`max-sm:fixed max-sm:h-screen max-sm:w-full max-sm:top-16 max-sm:border-t border-borderColor right-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 max-sm:p-4 transition-all duration-300 z-50 ${location.pathname === "/" ? "bg-light" : "bg-white"} ${open ? "max-sm:translate-x-0" : "max-sm:translate-x-full"}`}>
-            {menuLinks.map((link, index)=> (
-                <Link key={index} to={link.path}>
-                    {link.name}
-                </Link>
-            ))}
+    useEffect(() => {
+        if (location.pathname === '/cars') {
+            const params = new URLSearchParams(location.search)
+            setNavbarSearch(params.get('search') || '')
+        }
+    }, [location])
 
-            <div className='hidden lg:flex items-center text-sm gap-2 border border-borderColor px-3 rounded-full max-w-56'>
-                <input type="text" className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500" placeholder="Search cars"/>
-                <img src={assets.search_icon} alt="search" />
+    return (
+        <motion.div
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className={`flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 text-gray-600 border-b border-borderColor relative transition-all ${location.pathname === "/" && "bg-light"}`}>
+
+            <Link to='/'>
+                <motion.img whileHover={{ scale: 1.05 }} src={assets.logo} alt="logo" className="h-8" />
+            </Link>
+
+            <div className={`max-sm:fixed max-sm:h-screen max-sm:w-full max-sm:top-16 max-sm:border-t border-borderColor right-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 max-sm:p-4 transition-all duration-300 z-50 ${location.pathname === "/" ? "bg-light" : "bg-white"} ${open ? "max-sm:translate-x-0" : "max-sm:translate-x-full"}`}>
+                {menuLinks.map((link, index) => (
+                    <Link key={index} to={link.path}>
+                        {link.name}
+                    </Link>
+                ))}
+
+                <div className='hidden lg:flex items-center text-sm gap-2 border border-borderColor px-3 rounded-full max-w-56'>
+                    <input
+                        type="text"
+                        value={navbarSearch}
+                        onChange={(e) => setNavbarSearch(e.target.value)}
+                        onKeyDown={handleSearchKeyDown}
+                        className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500"
+                        placeholder="Search cars"
+                    />
+                    <button type="button" onClick={handleSearch} className="flex items-center justify-center w-9 h-9 rounded-full bg-white hover:bg-slate-100 transition">
+                        <img src={assets.search_icon} alt="search" className="w-4.5 h-4.5" />
+                    </button>
+                </div>
+
+                <div className='flex max-sm:flex-col items-start sm:items-center gap-6'>
+
+                    <button onClick={() => isAdmin ? navigate('/admin/dashboard') : isOwner ? navigate('/owner') : changeRole()} className="cursor-pointer">{isAdmin || isOwner ? 'Dashboard' : 'List cars'}</button>
+
+                    <button onClick={() => { user ? logout() : setShowLogin(true) }} className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition-all text-white rounded-lg">{user ? 'Logout' : 'Login'}</button>
+                </div>
             </div>
 
-            <div className='flex max-sm:flex-col items-start sm:items-center gap-6'>
+            <button className='sm:hidden cursor-pointer' aria-label="Menu" onClick={() => setOpen(!open)}>
+                <img src={open ? assets.close_icon : assets.menu_icon} alt="menu" />
+            </button>
 
-                <button onClick={()=> isAdmin ? navigate('/admin/dashboard') :  isOwner ? navigate('/owner') : changeRole()} className="cursor-pointer">{isAdmin || isOwner ? 'Dashboard' : 'List cars'}</button>
-
-                <button onClick={()=> {user ? logout() : setShowLogin(true)}} className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition-all text-white rounded-lg">{user ? 'Logout' : 'Login'}</button>
-            </div>
-        </div>
-
-        <button className='sm:hidden cursor-pointer' aria-label="Menu" onClick={()=> setOpen(!open)}>
-            <img src={open ? assets.close_icon : assets.menu_icon} alt="menu" />
-        </button>
-      
-    </motion.div>
-  )
+        </motion.div>
+    )
 }
 
 export default Navbar

@@ -10,6 +10,7 @@ const AdminAllCars = () => {
     const [filterStatus, setFilterStatus] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCar, setSelectedCar] = useState(null);
+    const [deletingCarId, setDeletingCarId] = useState(null);
 
     useEffect(() => {
         fetchAllCars();
@@ -38,6 +39,7 @@ const AdminAllCars = () => {
     const handleDeleteCar = async (carId) => {
         if (window.confirm('Are you sure you want to delete this car?')) {
             try {
+                setDeletingCarId(carId);
                 const token = localStorage.getItem('token');
                 const response = await axios.delete(
                     'http://localhost:3000/api/admin/cars/delete',
@@ -53,6 +55,8 @@ const AdminAllCars = () => {
             } catch (err) {
                 console.log(err);
                 alert('Failed to delete car');
+            } finally {
+                setDeletingCarId(null);
             }
         }
     };
@@ -187,9 +191,10 @@ const AdminAllCars = () => {
                                             <button
                                                 className="btn-delete"
                                                 onClick={() => handleDeleteCar(car._id)}
+                                                disabled={deletingCarId === car._id}
                                                 title="Delete Car"
                                             >
-                                                🗑️ Delete
+                                                {deletingCarId === car._id ? '⏳ Deleting...' : '🗑️ Delete'}
                                             </button>
                                         </td>
                                     </tr>

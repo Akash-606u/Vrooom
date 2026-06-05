@@ -10,6 +10,7 @@ const AdminUsers = () => {
     const [filterRole, setFilterRole] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
+    const [togglingUserId, setTogglingUserId] = useState(null);
 
     useEffect(() => {
         fetchAllUsers();
@@ -37,6 +38,7 @@ const AdminUsers = () => {
 
     const handleToggleStatus = async (userId) => {
         try {
+            setTogglingUserId(userId);
             const token = localStorage.getItem('token');
             const response = await axios.post(
                 'http://localhost:3000/api/admin/users/status',
@@ -55,6 +57,8 @@ const AdminUsers = () => {
         } catch (err) {
             console.log(err);
             alert('Failed to update user status');
+        } finally {
+            setTogglingUserId(null);
         }
     };
 
@@ -187,8 +191,9 @@ const AdminUsers = () => {
                                                     <button
                                                         className={`btn-toggle-status ${user.isActive ? 'deactivate' : 'activate'}`}
                                                         onClick={() => handleToggleStatus(user._id)}
+                                                        disabled={togglingUserId === user._id}
                                                     >
-                                                        {user.isActive ? '🔒 Deactivate' : '🔓 Activate'}
+                                                        {togglingUserId === user._id ? '⏳ Updating...' : user.isActive ? '🔒 Deactivate' : '🔓 Activate'}
                                                     </button>
                                                 </td>
                                             </tr>

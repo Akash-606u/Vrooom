@@ -18,6 +18,7 @@ const CarDetails = () => {
   const [paymentGateway, setPaymentGateway] = useState('stripe')
   const [drivingLicenseFile, setDrivingLicenseFile] = useState(null)
   const [identityProofFile, setIdentityProofFile] = useState(null)
+  const [bookingLoading, setBookingLoading] = useState(false)
   const currency = import.meta.env.VITE_CURRENCY
 
   const loadRazorpayScript = () => {
@@ -39,6 +40,7 @@ const CarDetails = () => {
     }
 
     try {
+      setBookingLoading(true)
       const formData = new FormData()
       formData.append('car', id)
       formData.append('pickupDate', pickupDate)
@@ -111,6 +113,8 @@ const CarDetails = () => {
       navigate('/my-bookings')
     } catch (error) {
       toast.error(error.message)
+    } finally {
+      setBookingLoading(false)
     }
   }
 
@@ -257,7 +261,9 @@ const CarDetails = () => {
             </div>
           </div>
 
-          <button className='w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl cursor-pointer'>Book Now</button>
+          <button disabled={bookingLoading} className='w-full bg-primary hover:bg-primary-dull disabled:bg-blue-400 transition-all py-3 font-medium text-white rounded-xl cursor-pointer'>
+            {bookingLoading ? 'Booking...' : 'Book Now'}
+          </button>
 
           <p className='text-center text-sm'>No credit card required to reserve</p>
 

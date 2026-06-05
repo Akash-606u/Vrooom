@@ -257,6 +257,18 @@
   transform: translateY(-1px);
 }
 
+.btn-view-details:disabled,
+.btn-toggle-status:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-view-details:disabled:hover,
+.btn-toggle-status:disabled:hover {
+  transform: none;
+}
+
 .user-details {
   background: white;
   border-radius: 22px;

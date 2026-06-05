@@ -3,6 +3,7 @@
   display: flex;
   min-height: 100vh;
   background: #f3f6fb;
+  width: 100%;
 }
 
 .admin-sidebar {
@@ -16,11 +17,46 @@
   overflow-y: auto;
   transition: all 0.3s ease;
   box-shadow: 4px 0 35px rgba(15, 23, 42, 0.12);
+  left: 0;
+  top: 0;
+  z-index: 1000;
 }
 
 .admin-sidebar.closed {
   width: 88px;
   min-width: 88px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  width: 44px;
+  height: 44px;
+  background: #3346cf;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 8px 24px rgba(51, 70, 207, 0.24);
+}
+
+.mobile-menu-btn span {
+  width: 24px;
+  height: 2.5px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.mobile-menu-btn:hover {
+  background: #2f2e8d;
 }
 
 .sidebar-header {
@@ -29,12 +65,24 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 24px;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .sidebar-header {
+    margin-bottom: 32px;
+  }
 }
 
 .brand-block {
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: opacity 0.3s ease;
+}
+
+.admin-sidebar.closed .brand-block {
+  display: none;
 }
 
 .brand-mark {
@@ -72,6 +120,21 @@
   width: 42px;
   height: 42px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 900px) {
+  .toggle-btn {
+    display: none;
+  }
 }
 
 .sidebar-profile {
@@ -83,6 +146,19 @@
   border-radius: 18px;
   padding: 16px;
   margin-bottom: 26px;
+  transition: opacity 0.3s ease;
+}
+
+.admin-sidebar.closed .sidebar-profile {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-sidebar.closed .sidebar-profile .profile-info {
+  display: none;
 }
 
 .profile-avatar {
@@ -107,6 +183,13 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: opacity 0.3s ease;
+}
+
+.admin-sidebar.closed .sidebar-nav {
+  opacity: 0;
+  visibility: hidden;
+  display: none;
 }
 
 .nav-section {
@@ -164,15 +247,29 @@
   transform: translateY(-1px);
 }
 
+.sidebar-logout {
+  transition: opacity 0.3s ease;
+}
+
+.admin-sidebar.closed .sidebar-logout {
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
 .admin-content {
   flex: 1;
   margin-left: 240px;
   transition: margin 0.3s ease;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 240px);
 }
 
 .admin-sidebar.closed ~ .admin-content {
   margin-left: 88px;
+  width: calc(100% - 88px);
 }
 
 .admin-header {
@@ -181,6 +278,8 @@
   gap: 24px;
   align-items: flex-start;
   padding: 32px 40px 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-header h1 {
@@ -235,6 +334,9 @@
 
 .admin-main {
   padding: 0 40px 40px;
+  width: 100%;
+  box-sizing: border-box;
+  flex: 1;
 }
 
 .loading,
@@ -259,20 +361,32 @@
 }
 
 @media (max-width: 900px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+
   .admin-sidebar {
-    position: fixed;
-    z-index: 20;
-    width: 100%;
-    height: auto;
-    max-height: 360px;
+    width: 260px;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+  }
+
+  .admin-sidebar.open {
+    transform: translateX(0);
   }
 
   .admin-sidebar.closed {
-    width: 100%;
+    width: 260px;
+    transform: translateX(-100%);
   }
 
   .admin-content {
     margin-left: 0;
+    width: 100%;
   }
 
   .admin-header {
@@ -286,6 +400,27 @@
 
   .admin-main {
     padding: 0 20px 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-sidebar::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 998;
+  }
+
+  .admin-sidebar.open::before {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 

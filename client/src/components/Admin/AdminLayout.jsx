@@ -105,6 +105,13 @@ const AdminLayout = ({ children }) => {
                 </button>
             </aside>
 
+            {/* Mobile Hamburger Button */}
+            <button className="mobile-menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             {/* Main Content */}
             <div className="admin-content">
                 <header className="admin-header">

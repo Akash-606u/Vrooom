@@ -22,7 +22,7 @@ const AdminUsers = () => {
             const token = localStorage.getItem('token');
             const roleParam = filterRole === 'all' ? '' : `?role=${filterRole}`;
             const response = await axios.get(
-                `http://localhost:3000/api/admin/users${roleParam}`,
+                `/api/admin/users${roleParam}`,
                 { headers: { Authorization: token } }
             );
             if (response.data.success) {
@@ -41,7 +41,7 @@ const AdminUsers = () => {
             setTogglingUserId(userId);
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                'http://localhost:3000/api/admin/users/status',
+                '/api/admin/users/status',
                 { userId },
                 { headers: { Authorization: token } }
             );
@@ -66,7 +66,7 @@ const AdminUsers = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
-                'http://localhost:3000/api/admin/users/details',
+                '/api/admin/users/details',
                 { userId },
                 { headers: { Authorization: token } }
             );

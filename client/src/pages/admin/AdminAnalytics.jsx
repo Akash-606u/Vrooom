@@ -17,7 +17,7 @@ const AdminAnalytics = () => {
             setLoading(true);
             const token = localStorage.getItem('token');
             const response = await axios.get(
-                'http://localhost:3000/api/admin/analytics',
+                '/api/admin/analytics',
                 { headers: { Authorization: token } }
             );
             if (response.data.success) {

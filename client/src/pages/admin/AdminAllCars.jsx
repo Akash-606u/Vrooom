@@ -22,7 +22,7 @@ const AdminAllCars = () => {
             const token = localStorage.getItem('token');
             const statusParam = filterStatus === 'all' ? '' : `&status=${filterStatus}`;
             const response = await axios.get(
-                `http://localhost:3000/api/admin/cars/all?${statusParam}`,
+                `/api/admin/cars/all?${statusParam}`,
                 { headers: { Authorization: token } }
             );
             if (response.data.success) {
@@ -42,7 +42,7 @@ const AdminAllCars = () => {
                 setDeletingCarId(carId);
                 const token = localStorage.getItem('token');
                 const response = await axios.delete(
-                    'http://localhost:3000/api/admin/cars/delete',
+                    '/api/admin/cars/delete',
                     {
                         data: { carId },
                         headers: { Authorization: token }

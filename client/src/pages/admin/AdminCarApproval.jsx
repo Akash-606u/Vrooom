@@ -19,7 +19,7 @@ const AdminCarApproval = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3000/api/admin/cars/pending', {
+            const response = await axios.get('/api/admin/cars/pending', {
                 headers: { Authorization: token }
             });
             if (response.data.success) {
@@ -37,7 +37,7 @@ const AdminCarApproval = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                'http://localhost:3000/api/admin/cars/approve',
+                '/api/admin/cars/approve',
                 { carId },
                 { headers: { Authorization: token } }
             );
@@ -62,7 +62,7 @@ const AdminCarApproval = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                'http://localhost:3000/api/admin/cars/reject',
+                '/api/admin/cars/reject',
                 { carId, reason: rejectionReason },
                 { headers: { Authorization: token } }
             );

@@ -16,7 +16,7 @@ const AdminDashboard = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3000/api/admin/dashboard', {
+            const response = await axios.get('/api/admin/dashboard', {
                 headers: { Authorization: token }
             });
             if (response.data.success) {

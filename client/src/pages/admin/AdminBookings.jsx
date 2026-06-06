@@ -19,7 +19,7 @@ const AdminBookings = () => {
             const token = localStorage.getItem('token');
             const statusParam = filterStatus === 'all' ? '' : `?status=${filterStatus}`;
             const response = await axios.get(
-                `http://localhost:3000/api/admin/bookings${statusParam}`,
+                `/api/admin/bookings${statusParam}`,
                 { headers: { Authorization: token } }
             );
             if (response.data.success) {
@@ -37,7 +37,7 @@ const AdminBookings = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                'http://localhost:3000/api/admin/bookings/status',
+                '/api/admin/bookings/status',
                 { bookingId, status: newStatus },
                 { headers: { Authorization: token } }
             );
